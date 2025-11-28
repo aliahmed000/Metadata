@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSV Metadata Generator - AI Powered</title>
+    <meta name="description"
+        content="Generate SEO-optimized metadata for your stock photos and export to CSV for Shutterstock, Adobe Stock, and more.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="logo">
+                <i class="fa-solid fa-file-csv"></i>
+                <span>Metadata<span class="highlight">Gen</span></span>
+            </div>
+            <nav>
+                <a href="#" class="active">Generator</a>
+                <a href="#">Templates</a>
+                <a href="#">Pricing</a>
+            </nav>
+            <div class="user-actions">
+                <button class="btn-secondary" id="api-key-btn"><i class="fa-solid fa-key"></i> API Key</button>
+                <button class="btn-primary">Get Started</button>
+            </div>
+        </header>
+
+        <!-- API Key Modal -->
+        <div id="api-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Enter Gemini API Key</h3>
+                    <span class="close-modal">&times;</span>
+                </div>
+                <div class="modal-body">
+                    <p>To use the AI features, please enter your Google Gemini API Key. It will be stored locally in
+                        your browser.</p>
+                    <div class="form-group">
+                        <label for="api-key-input">API Key</label>
+                        <input type="password" id="api-key-input" placeholder="Paste your API key here...">
+                    </div>
+                    <div class="form-group">
+                        <label for="model-select">AI Model</label>
+                        <select id="model-select">
+                            <option value="gemini-2.5-flash">Gemini 2.5 Flash (Recommended)</option>
+                            <option value="gemini-1.5-flash">Gemini 1.5 Flash</option>
+                            <option value="gemini-1.5-pro">Gemini 1.5 Pro</option>
+                        </select>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn-outline" id="test-api-btn" style="margin-right: auto;">Test
+                            Connection</button>
+                        <button class="btn-secondary close-modal-btn">Cancel</button>
+                        <button class="btn-primary" id="save-api-key-btn">Save Key</button>
+                    </div>
+                    <p class="small-text">Don't have a key? <a href="https://aistudio.google.com/app/apikey"
+                            target="_blank">Get one here</a>.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <main>
+            <!-- Hero Section -->
+            <section class="hero">
+                <h1>Generate Metadata for Stock Photos <br><span class="gradient-text">in Seconds</span></h1>
+                <p>AI-powered tool to create titles, descriptions, and keywords for Shutterstock, Adobe Stock, and
+                    Freepik.</p>
+            </section>
+
+            <!-- Upload Zone -->
+            <section class="upload-section" id="upload-zone">
+                <div class="upload-box">
+                    <i class="fa-solid fa-cloud-arrow-up upload-icon"></i>
+                    <h3>Drop images here to process</h3>
+                    <p>Supports JPG, PNG, WEBP (Max 50MB)</p>
+                    <button class="btn-outline" id="browse-btn">Browse Files</button>
+                    <input type="file" id="file-input" multiple accept="image/*" hidden>
+                </div>
+            </section>
+
+            <!-- Workspace (Hidden by default until files uploaded) -->
+            <section class="workspace" id="workspace" style="display: none;">
+                <div class="toolbar">
+                    <div class="stats">
+                        <span id="image-count">0 Images</span>
+                    </div>
+                    <div class="actions">
+                        <button class="btn-secondary" id="clear-all-btn"><i class="fa-solid fa-trash"></i> Clear
+                            All</button>
+                        <button class="btn-primary" id="generate-btn"><i class="fa-solid fa-wand-magic-sparkles"></i>
+                            Generate AI Metadata</button>
+                        <button class="btn-success" id="download-btn"><i class="fa-solid fa-download"></i> Download
+                            CSV</button>
+                    </div>
+                </div>
+
+                <div class="content-grid">
+                    <!-- Image List -->
+                    <div class="image-list" id="image-list">
+                        <!-- Items will be injected here via JS -->
+                    </div>
+
+                    <!-- Editor Panel (Sticky) -->
+                    <div class="editor-panel">
+                        <div class="editor-header">
+                            <h3>Metadata Editor</h3>
+                            <span class="badge">Batch Mode</span>
+                        </div>
+                        <div class="editor-form">
+                            <div class="form-group">
+                                <label for="title-input">Title</label>
+                                <input type="text" id="title-input"
+                                    placeholder="e.g. Happy family playing in the park...">
+                            </div>
+                            <div class="form-group">
+                                <label for="desc-input">Description</label>
+                                <textarea id="desc-input" rows="3"
+                                    placeholder="Detailed description of the image..."></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="keywords-input">Keywords</label>
+                                <div class="keyword-container" id="keyword-container">
+                                    <!-- Tags will go here -->
+                                </div>
+                                <input type="text" id="keywords-input" placeholder="Add keyword and press Enter">
+                                <div class="keyword-suggestions">
+                                    <small>Suggestions:</small>
+                                    <div class="chips" id="suggestion-chips">
+                                        <!-- AI Suggestions -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
